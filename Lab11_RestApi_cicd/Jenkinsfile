@@ -20,20 +20,26 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                bat 'npm ci'
+                dir('Lab11_RestApi_cicd') {
+                    bat 'npm ci'
+                }
             }
         }
 
         stage('Test API') {
             steps {
-                bat 'npm test'
+                dir('Lab11_RestApi_cicd') {
+                    bat 'npm test'
+                }
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                bat 'docker build --pull -t %IMAGE_NAME%:%BUILD_NUMBER% .'
-                bat 'docker tag %IMAGE_NAME%:%BUILD_NUMBER% %IMAGE_NAME%:latest'
+                dir('Lab11_RestApi_cicd') {
+                    bat 'docker build --pull -t %IMAGE_NAME%:%BUILD_NUMBER% .'
+                    bat 'docker tag %IMAGE_NAME%:%BUILD_NUMBER% %IMAGE_NAME%:latest'
+                }
             }
         }
 
@@ -46,7 +52,9 @@ pipeline {
 
         stage('Verify Deployment') {
             steps {
-                bat 'npm run verify'
+                dir('Lab11_RestApi_cicd') {
+                    bat 'npm run verify'
+                }
             }
         }
     }
